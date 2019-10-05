@@ -5,7 +5,7 @@ import locale
 locale.setlocale( locale.LC_ALL, '' )
 
 from do import db
-from do.models import User, Goal
+from do.models import User
 from do.strings import welcome, down
 
 

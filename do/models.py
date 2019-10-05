@@ -9,9 +9,9 @@ class User(db.Model):
 
 # class Goal(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
-#     description = db.Column(db.String(), nullable=False)
-#     days_accomplished = db.Column(db.Integer)
-#     streak = db.Column(db.Integer)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     # description = db.Column(db.String(), nullable=False)
+#     # days_accomplished = db.Column(db.Integer)
+#     # streak = db.Column(db.Integer)
+#     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 #     def __repr__(self):
 #         return f"Goal('{self.description}')"
