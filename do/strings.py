@@ -1,5 +1,5 @@
 def welcome_text():
-    return "Welcome to Do! Do is an SMS app that can help you make good habits (or break bad ones) by tracking your progress daily. Do you want help make a new habit or break a bad one? Reply with either MAKE or BREAK"
+    return "Welcome to Do! Do is an SMS app that can help you make good habits (or break bad ones) by tracking your progress daily. Do you want help to make a new habit or break a bad one? Reply with either MAKE or BREAK to get started"
 
 def down_text():
     return "Sorry, Do isn't available right now. Please try again later"
