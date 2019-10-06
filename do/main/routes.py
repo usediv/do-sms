@@ -61,7 +61,7 @@ def sms():
         # elif Goal.query.filter_by(user_id=user.id).first().description == None:
 
             # if no goal and have specified make or break, save goal
-            else:
+            # else:
 
                 # goal = Goal(description=text,user_id=user.id)
                 # db.session.add(goal)
