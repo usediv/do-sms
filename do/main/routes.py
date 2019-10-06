@@ -51,9 +51,9 @@ def sms():
             # # goal confirmation messaging
             # print('New goal ' + description)
 
-        else:
+            else:
 
-            print('nothing to see here')
+                print('nothing to see here')
 
 
 
