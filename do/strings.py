@@ -9,3 +9,6 @@ def more_text():
 
 def less_text():
     return "OK, what do you want to do less often? Drink? Swear? Eat junk food?"
+
+def more_or_less_error_text():
+    return "Please only respond with MAKE or BREAK"

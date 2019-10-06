@@ -9,8 +9,8 @@ class User(db.Model):
 
 class Goal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(480), nullable=False)
     goal_type = db.Column(db.String(30), nullable=False)
+    description = db.Column(db.String(480))
     # achieved_tally = db.Column(db.Integer)
     # streak = db.Column(db.Integer)
     # longest_streak

@@ -6,7 +6,7 @@ locale.setlocale( locale.LC_ALL, '' )
 
 from do import db
 from do.models import User, Goal
-from do.strings import welcome_text, down_text, more_text, less_text
+from do.strings import welcome_text, down_text, more_text, less_text, more_or_less_error_text
 
 
 main = Blueprint('main', __name__)
@@ -20,7 +20,7 @@ def sms():
     resp = MessagingResponse()
 
     try:
-        #query db to check if user exists
+        # query db to check if user exists
         user = User.query.filter_by(phone_number=number).first()
 
         # if new user...
@@ -31,29 +31,45 @@ def sms():
             db.session.add(user)
             db.session.commit()
 
-            # welcome messaging
+            # welcome messaging and make or break prompt
             resp.message(welcome_text())
-            print('New user ' + number)
 
         # otherwise check if user has a goal
         elif Goal.query.filter_by(user_id=user.id).first() == None:
 
+            # if no goal and replied 'make', create a more goal
             if text.lower()=='make':
+                goal = Goal(goal_type='more')
+                db.session.add(goal)
+                db.session.commit()
                 resp.message(more_text())
 
+            # if no goal and replied 'break', create a less goal
             elif text.lower()=='break':
+                goal = Goal(goal_type='less')
+                db.session.add(goal)
+                db.session.commit()
                 resp.message(less_text())
 
-            # goal = Goal(description=text,user_id=user.id)
-            # db.session.add(goal)
-            # db.session.commit()
-            #
-            # # goal confirmation messaging
-            # print('New goal ' + description)
+            # if neither, error
+            else:
+                resp.message(more_or_less_error_text())
 
+        # check if goal has a description
+        elif Goal.query.filter_by(user_id=user.id).first().description==None:
+            resp.message('Nothing to see here')
+        # elif Goal.query.filter_by(user_id=user.id).first().description == None:
+
+            # if no goal and have specified make or break, save goal
             else:
 
-                print('nothing to see here')
+                # goal = Goal(description=text,user_id=user.id)
+                # db.session.add(goal)
+                # db.session.commit()
+                #
+                # # goal confirmation messaging
+                # print('New goal ' + description)
+
 
 
 
