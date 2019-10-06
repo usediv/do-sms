@@ -5,8 +5,8 @@ import locale
 locale.setlocale( locale.LC_ALL, '' )
 
 from do import db
-from do.models import User
-from do.strings import welcome_text, down_text
+from do.models import User, Goal
+from do.strings import welcome_text, down_text, more_text, less_text
 
 
 main = Blueprint('main', __name__)
@@ -35,12 +35,25 @@ def sms():
             resp.message(welcome_text())
             print('New user ' + number)
 
+        # otherwise check if user has a goal
+        elif Goal.query.filter_by(user_id=user.id).first() == None:
+
+            if text.lower()=='make':
+                resp.message(more_text())
+
+            elif text.lower()=='break':
+                resp.message(less_text())
+
+            # goal = Goal(description=text,user_id=user.id)
+            # db.session.add(goal)
+            # db.session.commit()
+            #
+            # # goal confirmation messaging
+            # print('New goal ' + description)
+
         else:
 
-            print('Existing user')
-
-        # # otherwise check if user has a budget
-        # elif Budget.query.filter_by(user_id=user.id).first() == None:
+            print('nothing to see here')
 
 
 
