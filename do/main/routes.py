@@ -6,7 +6,7 @@ locale.setlocale( locale.LC_ALL, '' )
 
 from do import db
 from do.models import User
-from do.strings import welcome, down
+from do.strings import welcome_text, down_text
 
 
 main = Blueprint('main', __name__)
@@ -33,7 +33,7 @@ def sms():
 
             #welcome messaging
             # resp.message(welcome)
-            resp.message(welcome())
+            resp.message(welcome_text())
             print('New user ' + number)
 
         else:
@@ -98,6 +98,6 @@ def sms():
         #             resp.message("Your remaining weekly spending budget is {}".format(locale.currency(balance, grouping=True)))
 
     except:
-        resp.message(down())
+        resp.message(down_text())
 
     return str(resp)
