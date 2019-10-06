@@ -31,8 +31,7 @@ def sms():
             db.session.add(user)
             db.session.commit()
 
-            #welcome messaging
-            # resp.message(welcome)
+            # welcome messaging
             resp.message(welcome_text())
             print('New user ' + number)
 
