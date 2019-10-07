@@ -6,7 +6,7 @@ locale.setlocale( locale.LC_ALL, '' )
 
 from do import db
 from do.models import User, Goal
-from do.strings import welcome_text, down_text, more_text, less_text, more_or_less_error_text
+from do.strings import welcome_text, down_text, more_text, less_text, more_or_less_error_text, make_or_break_error_text, goal_confirmation_text, goal_active_text, activation_error_text
 
 
 main = Blueprint('main', __name__)
@@ -19,45 +19,62 @@ def sms():
     text = request.form['Body']
     resp = MessagingResponse()
 
-    try:
-        # query db to check if user exists
-        user = User.query.filter_by(phone_number=number).first()
+    # try:
+    # query db to check if user exists
+    user = User.query.filter_by(phone_number=number).first()
 
-        # if new user...
-        if user == None:
+    # if new user...
+    if user == None:
+        print('No user')
 
-            # add to db
-            user = User(phone_number=number)
-            db.session.add(user)
-            db.session.commit()
+        # add to db
+        user = User(phone_number=number)
+        db.session.add(user)
+        db.session.commit()
 
-            # welcome messaging and make or break prompt
-            resp.message(welcome_text())
+        # welcome messaging and make or break prompt
+        resp.message(welcome_text())
+        session['new_goal'] = 'new'
 
-        # otherwise check if user has a goal
-        elif Goal.query.filter_by(user_id=user.id).first() == None:
+    # save session and goal prompt
+    elif text.lower()=='make' or text.lower()=='break':
+        session['new_goal'] = text.lower()
+        if text.lower()=='make':
+            resp.message(more_text())
+        elif text.lower()=='break':
+            resp.message(less_text())
 
-            # if no goal and replied 'make', create a more goal
-            if text.lower()=='make':
-                goal = Goal(goal_type='more')
-                db.session.add(goal)
-                db.session.commit()
-                resp.message(more_text())
+    #catch if trying something other than make or break entered
+    elif session['new_goal']=='new' and text.lower()!='make' or session['new_goal']=='new' and text.lower()!='break':
+        resp.message(make_or_break_error_text())
 
-            # if no goal and replied 'break', create a less goal
-            elif text.lower()=='break':
-                goal = Goal(goal_type='less')
-                db.session.add(goal)
-                db.session.commit()
-                resp.message(less_text())
+    # capture description if creating a new goal
+    elif session['new_goal']=='make' or session['new_goal']=='break':
+        goal = Goal(goal_type=session['new_goal'],description=text,user_id=user.id)
+        db.session.add(goal)
+        db.session.commit()
+        resp.message(goal_confirmation_text(text.lower(),session['new_goal']))
+        session['new_goal']='pending'
 
-            # if neither, error
-            else:
-                resp.message(more_or_less_error_text())
+    elif session['new_goal']=='pending' and text.lower()=='start':
+        goal = Goal.query.filter_by(user_id=user.id).first()
+        goal.active=True
+        db.session.commit()
+        resp.message(goal_active_text())
+        session['new_goal']='complete'
 
-        # check if goal has a description
-        elif Goal.query.filter_by(user_id=user.id).first().description==None:
-            resp.message('Nothing to see here')
+    elif session['new_goal']=='pending' and text.lower()!='start':
+        resp.message(activation_error_text())
+
+
+
+            # # if neither, error
+            # else:
+            #     resp.message(more_or_less_error_text())
+
+        # # check if goal has a description
+        # elif Goal.query.filter_by(user_id=user.id).first().description==None:
+        #     resp.message('Nothing to see here')
         # elif Goal.query.filter_by(user_id=user.id).first().description == None:
 
             # if no goal and have specified make or break, save goal
@@ -71,7 +88,16 @@ def sms():
                 # print('New goal ' + description)
 
 
+# # otherwise check if user has a goal
+# elif Goal.query.filter_by(user_id=user.id).first() == None:
 
+# goal = Goal(goal_type='more',user_id=user.id)
+# db.session.add(goal)
+# db.session.commit()
+
+            # goal = Goal(goal_type='less')
+            # db.session.add(goal)
+            # db.session.commit()
 
         #     if text.lower() == 'idk':
         #         resp.message("To figure out your weekly spending budget take your annual income, minus expenses (any costs that you know you’ll incur throughout the year), and divide that by 52")
@@ -125,7 +151,7 @@ def sms():
         #             resp.message("Sorry, please only reply with a number to record spending")
         #             resp.message("Your remaining weekly spending budget is {}".format(locale.currency(balance, grouping=True)))
 
-    except:
-        resp.message(down_text())
+    # except:
+    #     resp.message(down_text())
 
     return str(resp)
