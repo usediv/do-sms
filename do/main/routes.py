@@ -46,12 +46,12 @@ def sms():
             resp.message(less_text())
 
     # catch if trying something other than make or break for new user
-    elif session['new_goal']=='new':
+    elif session.get('new_goal')=='new':
         if text.lower()!='make' or text.lower()!='break':
             resp.message(make_or_break_error_text())
 
     # if new goal capture description and save as inactive/pending
-    elif session['new_goal']=='make' or session['new_goal']=='break':
+    elif session.get('new_goal')=='make' or session.get('new_goal')=='break':
         goal = Goal.query.filter_by(user_id=user.id).first()
         # if user doesn't have goal yet create new one
         if goal == None:
@@ -67,7 +67,7 @@ def sms():
         session['new_goal']='pending'
 
     # if new goal is pending and confirmation received
-    elif session['new_goal']=='pending' and text.lower()=='start':
+    elif session.get('new_goal')=='pending' and text.lower()=='start':
         goal = Goal.query.filter_by(user_id=user.id).first()
         goal.active=True
         db.session.commit()
@@ -75,7 +75,7 @@ def sms():
         session['new_goal']='complete'
 
     # if goal pending and other response received
-    elif session['new_goal']=='pending' and text.lower()!='start':
+    elif session.get('new_goal')=='pending' and text.lower()!='start':
         resp.message(activation_error_text())
 
     # # if response fails send generic error message
