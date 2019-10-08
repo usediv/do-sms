@@ -19,6 +19,8 @@ def sms():
     text = request.form['Body']
     resp = MessagingResponse()
 
+    print('suuuuuuuuuuuupppppppppppppppp')
+
     # broad error handling
     try:
 
