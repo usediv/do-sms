@@ -24,7 +24,7 @@ def goal_confirmation_text(goal, goal_type):
     return f"OK, you want to {goal} {frequency}. Great! To start receiving daily texts from Do reply START. You can text MAKE or BREAK to change your goal or STOP to stop receiving texts at any time"
 
 def goal_active_text():
-    return "Good luck for your first day!"
+    return "Ok, you'll start receiving daily texts tomorrow. Good luck for your first day!"
 
 def activation_error_text():
     return "Reply START to begin receiving daily texts"
