@@ -1,8 +1,9 @@
 from flask import session
+from datetime import date
 
 from do import client, do_number, db
 from do.models import User, Goal
-# from do.strings import sunday_summary_text
+from do.strings import daily_checkin_text
 
 
 def sms_alert(message,recipient):
@@ -18,10 +19,10 @@ def sms_alert(message,recipient):
                               to=phone_number
                           )
 
-def sms_broadcast(message,users=User.query.filter_by(active=True).all()):
+def sms_broadcast(message,users=User.query.all()):
     '''
     for alerts: sends a one-off sms to multiple users from do, expects message
-    to be a string and users to be a list of user IDs (default: all active users)
+    to be a string and users to be a list of user IDs (default: all users)
     '''
     body = f'{message}'
     for user in users:
@@ -32,21 +33,21 @@ def sms_broadcast(message,users=User.query.filter_by(active=True).all()):
                               to=phone_number
                           )
 
-# def sunday_summary():
-#     '''
-#     resets ALL users' spending budgets (even if inactive) and notifies them if active
-#     '''
-#     users = User.query.all()
-#     for user in users:
-#         budget = Budget.query.filter_by(user_id=user.id).first()
-#         newBalance = budget.budget
-#         budget.balance = newBalance
-#         db.session.commit()
-#         if user.active == True:
-#             body = sunday_summary_text(newBalance)
-#             phone_number = user.phone_number
-#             client.messages.create(
-#                                   body=body,
-#                                   from_=mo_number,
-#                                   to=phone_number
-#                                   )
+def daily_checkin():
+    '''
+    iterates through users in DB and sends a SMS to each one if the first goal
+    associated with them is active
+    '''
+    today = date.today()
+    weekday=today.strftime("%A")
+    users = User.query.all()
+    for user in users:
+        goal = Goal.query.filter_by(user_id=user.id).first()
+        if goal.active == True:
+            body = daily_checkin_text(goal.description,weekday)
+            phone_number = user.phone_number
+            client.messages.create(
+                                  body=body,
+                                  from_=do_number,
+                                  to=phone_number
+                                  )

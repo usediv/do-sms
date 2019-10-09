@@ -28,3 +28,6 @@ def goal_active_text():
 
 def activation_error_text():
     return "Reply START to begin receiving daily texts"
+
+def daily_checkin_text(goal, weekday):
+    return f"Happy {weekday}! Did you {goal} yesterday? Reply Y for yes or N for no"
