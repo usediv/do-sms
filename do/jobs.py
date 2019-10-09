@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', hour=20, minute=54)
+@sched.scheduled_job('cron', hour=0)
 def scheduled_job():
     daily_checkin()
 
