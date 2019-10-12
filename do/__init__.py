@@ -18,5 +18,5 @@ auth_token = Config.TWILIO_AUTH_TOKEN
 client = Client(account_sid,auth_token)
 do_number = Config.DO_NUMBER
 
-from do.main.routes import main
-app.register_blueprint(main)
+# from do.main.routes import main
+# app.register_blueprint(main)
