@@ -19,4 +19,4 @@ client = Client(account_sid,auth_token)
 do_number = Config.DO_NUMBER
 
 from do.main.routes import main
-# app.register_blueprint(main)
+app.register_blueprint(main)
