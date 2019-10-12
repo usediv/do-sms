@@ -1,5 +1,5 @@
-from mo import db
-from mo.models import User, Budget
+from do import db
+from do.models import User, Goal, History
 
 #create database and tables
 db.create_all()
