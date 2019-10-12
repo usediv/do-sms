@@ -8,7 +8,7 @@ from do.models import User, Goal, History
 # from do.utils import get_streak, get_count
 #
 #
-# main = Blueprint('main', __name__)
+main = Blueprint('main', __name__)
 #
 # @main.route("/sms", methods=['GET', 'POST'])
 # def sms():
