@@ -46,7 +46,7 @@ def daily_checkin():
         print(user)
         goal = Goal.query.filter_by(user_id=user.id).first()
         # check if goal is active
-        if goal.active == True:
+        if goal!=None and goal.active == True:
             print('active')
             # check yesterday to see if response recorded
             yesterday = History.query.filter_by(date=today-timedelta(days=1), goal_id=goal.id).first()
