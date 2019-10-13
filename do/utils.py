@@ -59,7 +59,7 @@ def daily_checkin():
             # check for history item for today (safeguard: redundant in normal cases)
             current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
             print(current_history)
-            if current_history==None:
+            # if current_history==None:
                 # # create history item
                 # history = History(date=today, goal_id=goal.id)
                 # db.session.add(history)
