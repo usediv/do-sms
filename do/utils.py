@@ -43,14 +43,11 @@ def daily_checkin():
     users = User.query.all()
     # iterate through users
     for user in users:
-        print(user)
         goal = Goal.query.filter_by(user_id=user.id).first()
         # check if goal is active
         if goal!=None and goal.active == True:
-            print('active')
             # check yesterday to see if response recorded
             yesterday = History.query.filter_by(date=today-timedelta(days=1), goal_id=goal.id).first()
-            print(yesterday)
             #avoid error if no record for yesterday
             if yesterday!=None:
                 if yesterday.achieved==None:
@@ -58,21 +55,20 @@ def daily_checkin():
                     goal.streak=0
             # check for history item for today (safeguard: redundant in normal cases)
             current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
-            print(current_history)
-            # if current_history==None:
-                # # create history item
-                # history = History(date=today, goal_id=goal.id)
-                # db.session.add(history)
-                # # commit to db
-                # db.session.commit()
-            # # compose and send message
-            # body = daily_checkin_text(goal.description,weekday)
-            # phone_number = user.phone_number
-            # client.messages.create(
-            #                       body=body,
-            #                       from_=do_number,
-            #                       to=phone_number
-            #                       )
+            if current_history==None:
+                # create history item
+                history = History(date=today, goal_id=goal.id)
+                db.session.add(history)
+                # commit to db
+                db.session.commit()
+            # compose and send message
+            body = daily_checkin_text(goal.description,weekday)
+            phone_number = user.phone_number
+            client.messages.create(
+                                  body=body,
+                                  from_=do_number,
+                                  to=phone_number
+                                  )
 
 def get_streak(goal,date=date.today(),counter=0):
     """
