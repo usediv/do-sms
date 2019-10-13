@@ -48,9 +48,11 @@ def daily_checkin():
         if goal.active == True:
             # check yesterday to see if response recorded
             yesterday = History.query.filter_by(date=today-timedelta(days=1), goal_id=goal.id).first()
-            if yesterday.achieved==None:
-                # reset streak to zero if not
-                goal.streak=0
+            #avoid error if no record for yesterday
+            if yesterday!=None:
+                if yesterday.achieved==None:
+                    # reset streak to zero if not
+                    goal.streak=0
             # create history item
             history = History(date = today, goal_id=goal.id)
             db.session.add(history)
