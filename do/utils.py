@@ -87,7 +87,7 @@ def get_count(goal,date=date.today(),counter=0):
     counting back from the date passed (default today)
     """
     history = History.query.filter_by(date=date, goal_id=goal.id).first()
-    if history.achieved==True:
+    if history!=None and history.achieved==True:
         counter+=1
     if date<=goal.start_date:
         return counter
