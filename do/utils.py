@@ -55,22 +55,20 @@ def daily_checkin():
                     goal.streak=0
             # check for history item for today (safeguard: redundant in normal cases)
             current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
-            print(current_history)
             if current_history==None:
-                print('None')
                 # create history item
                 history = History(date=today, goal_id=goal.id)
                 db.session.add(history)
                 # commit to db
                 db.session.commit()
-            # # compose and send message
-            # body = daily_checkin_text(goal.description,weekday)
-            # phone_number = user.phone_number
-            # client.messages.create(
-            #                       body=body,
-            #                       from_=do_number,
-            #                       to=phone_number
-            #                       )
+            # compose and send message
+            body = daily_checkin_text(goal.description,weekday)
+            phone_number = user.phone_number
+            client.messages.create(
+                                  body=body,
+                                  from_=do_number,
+                                  to=phone_number
+                                  )
 
 def get_streak(goal,date=date.today(),counter=0):
     """
