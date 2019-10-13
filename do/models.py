@@ -22,7 +22,7 @@ class Goal(db.Model):
 
 class History(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, unique=True, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     achieved = db.Column(db.Boolean)
     goal_id = db.Column(db.Integer, db.ForeignKey('goal.id'), nullable=False)
     def __repr__(self):
