@@ -53,11 +53,14 @@ def daily_checkin():
                 if yesterday.achieved==None:
                     # reset streak to zero if not
                     goal.streak=0
-            # create history item
-            history = History(date = today, goal_id=goal.id)
-            db.session.add(history)
-            # commit to db
-            db.session.commit()
+            # check for history item for today (safeguard: redundant in normal cases)
+            current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
+            if current_history==None:
+                # create history item
+                history = History(date = today, goal_id=goal.id)
+                db.session.add(history)
+                # commit to db
+                db.session.commit()
             # compose and send message
             body = daily_checkin_text(goal.description,weekday)
             phone_number = user.phone_number
