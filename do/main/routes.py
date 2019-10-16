@@ -119,11 +119,6 @@ def sms():
                                 current_history.achieved = response
                             db.session.commit()
 
-                            # update streak and count for goal based on db
-                            goal.count=get_count(goal)
-                            goal.streak=get_streak(goal)
-                            db.session.commit()
-
                             # send response
                             resp.message(achievement_confirmation_text(get_count(goal),get_streak(goal),goal.start_date,today))
 

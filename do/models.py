@@ -13,8 +13,6 @@ class Goal(db.Model):
     description = db.Column(db.String(480))
     start_date = db.Column(db.Date)
     active = db.Column(db.Boolean, nullable=False, default=False)
-    count = db.Column(db.Integer, nullable=False, default=0)
-    streak = db.Column(db.Integer, nullable=False, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     history = db.relationship('History', backref='goal', lazy=True)
     def __repr__(self):

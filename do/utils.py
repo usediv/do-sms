@@ -46,13 +46,6 @@ def daily_checkin():
         goal = Goal.query.filter_by(user_id=user.id).first()
         # check if goal is active
         if goal!=None and goal.active == True:
-            # check yesterday to see if response recorded
-            yesterday = History.query.filter_by(date=today-timedelta(days=1), goal_id=goal.id).first()
-            #avoid error if no record for yesterday
-            if yesterday!=None:
-                if yesterday.achieved==None:
-                    # reset streak to zero if not
-                    goal.streak=0
             # check for history item for today (safeguard: redundant in normal cases)
             current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
             if current_history==None:
