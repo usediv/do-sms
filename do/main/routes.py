@@ -125,7 +125,7 @@ def sms():
                             db.session.commit()
 
                             # send response
-                            resp.message(achievement_confirmation_text(goal.count,goal.streak,goal.start_date,today))
+                            resp.message(achievement_confirmation_text(get_count(goal),get_streak(goal),goal.start_date,today))
 
 
     # if response fails send generic error message
