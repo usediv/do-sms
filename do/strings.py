@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+today = date.today()
 
 def welcome_text():
     return "Welcome to Do! Do is an SMS app that can help you make or break habits by tracking your progress daily. Do you want help to make a new habit or break a bad one? Reply with either MAKE or BREAK to get started"
@@ -37,7 +38,7 @@ def activation_error_text():
 def daily_checkin_text(goal, weekday):
     return f"Happy {weekday}! Did you {goal} yesterday? Reply Y for yes or N for no"
 
-def achievement_confirmation_text(count,streak,start_date,today):
+def achievement_confirmation_text(count,streak,start_date,today=today):
     delta = today-start_date
     days = delta.days
     if streak==0 and count==0:
