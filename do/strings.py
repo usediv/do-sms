@@ -50,4 +50,4 @@ def achievement_confirmation_text(count,streak,start_date,today=today):
     elif streak==1 and count>1:
         return f"Great job! Congrats on getting back on the horse! You've achieved your daily goal {count} times in {days} days."
     elif streak>=2:
-        return f"Nice work! That's {streak} days in a row and {count} days that you've achieved your goal in total. Keep em comin!"
+        return f"Nice work! That's {streak} days in a row and {count} days that you've achieved your goal in total. Keep up the good work!"
