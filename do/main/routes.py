@@ -8,10 +8,10 @@ from do.models import User, Goal, History
 # from do.utils import get_streak, get_count, get_achieved
 #
 #
-# main = Blueprint('main', __name__)
-#
-# @main.route("/sms", methods=['GET', 'POST'])
-# def sms():
+main = Blueprint('main', __name__)
+
+@main.route("/sms", methods=['GET', 'POST'])
+def sms():
 #
 #     # get number and message body
 #     number = request.form['From']
