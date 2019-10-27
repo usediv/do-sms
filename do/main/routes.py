@@ -5,7 +5,7 @@ from datetime import date
 from do import db
 from do.models import User, Goal, History
 from do.strings import welcome_text, down_text, desc_prompt_text, more_or_less_error_text, make_or_break_error_text, goal_confirmation_text, goal_active_text, activation_error_text, achievement_confirmation_text
-from do.utils import get_streak, get_count
+from do.utils import get_streak, get_count, get_achieved
 
 
 main = Blueprint('main', __name__)
@@ -103,13 +103,7 @@ def sms():
                         # if goal response received
                         if text.lower()=='y' or text.lower()=='n':
 
-                            # parse response based on goal type and update goal counters (if achieved)
-                            if text.lower()=='y' and goal.goal_type=='make' or text.lower()=='n' and goal.goal_type=='break':
-                                response=True
-
-                            # if failed
-                            elif text.lower()=='y' and goal.goal_type=='break' or text.lower()=='n' and goal.goal_type=='make':
-                                response=False
+                            response = get_achieved(goal,text)
 
                             # check if existing history item, update DB and respond
                             if current_history==None:
@@ -120,7 +114,10 @@ def sms():
                             db.session.commit()
 
                             # send response
-                            resp.message(achievement_confirmation_text(get_count(goal),get_streak(goal),goal.start_date,today))
+                            histories = History.query.filter_by(goal_id=goal.id).all()
+                            count = get_count(histories)
+                            streak = get_streak(histories)
+                            resp.message(achievement_confirmation_text(count,streak,goal.start_date,today))
 
 
     # if response fails send generic error message

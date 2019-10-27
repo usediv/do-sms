@@ -63,26 +63,38 @@ def daily_checkin():
                                   to=phone_number
                                   )
 
-def get_streak(goal,date=date.today(),counter=0):
+def get_achieved(goal,response):
     """
-    checks DB and returns number of continuous days a goal is marked as achieved
-    counting back from the date passed (default today)
+    takes in a goal and achievement response and returns if goal was achieved
+    or not as boolean based on goal type (eg. Y + 'make' = True)
     """
-    history = History.query.filter_by(date=date, goal_id=goal.id).first()
-    if history==None or history.achieved==False or history.achieved==None:
-        return counter
-    else:
-        return (get_streak(goal,date-timedelta(days=1),counter+1))
+    if response.lower()=='y' and goal.goal_type=='make' or response.lower()=='n' and goal.goal_type=='break':
+        return True
+    elif response.lower()=='y' and goal.goal_type=='break' or response.lower()=='n' and goal.goal_type=='make':
+        return False
 
-def get_count(goal,date=date.today(),counter=0):
+
+def get_streak(histories):
     """
-    checks DB and returns totalnumber of days a goal is marked as achieved
-    counting back from the date passed (default today)
+    takes in a list of histories and returns number of times goal was achieved
+    in a row as an integer, working backwards from latest to earliest
     """
-    history = History.query.filter_by(date=date, goal_id=goal.id).first()
-    if history!=None and history.achieved==True:
-        counter+=1
-    if date<=goal.start_date:
-        return counter
-    else:
-        return (get_count(goal,date-timedelta(days=1),counter))
+    histories = sorted(histories, key=lambda history: history.date, reverse=True)
+    streak = 0
+    for history in histories:
+        if history.achieved==True:
+            streak+=1
+        else:
+            return streak
+    return streak
+
+def get_count(histories):
+    """
+    takes in a list of histories and returns total number of days a goal is
+    marked as achieved as an integer
+    """
+    count = 0
+    for history in histories:
+        if history.achieved==True:
+            count+=1
+    return count
