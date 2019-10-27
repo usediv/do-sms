@@ -15,7 +15,7 @@ def sms():
 
     # get number and message body
     number = request.form['From']
-    text = request.form['Body']
+    text = request.form['Body'].strip()
     resp = MessagingResponse()
     today = date.today()
 
