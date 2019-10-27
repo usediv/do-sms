@@ -101,7 +101,7 @@ def sms():
                         current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
 
                         # if goal response received
-                        if text.lower()=='y' or text.lower()=='n':
+                        if text.lower()=='y' or text.lower()=='yes' or text.lower()=='n' or text.lower()=='no':
 
                             response = get_achieved(goal,text)
 

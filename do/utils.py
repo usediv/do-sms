@@ -66,12 +66,20 @@ def daily_checkin():
 def get_achieved(goal,response):
     """
     takes in a goal and achievement response and returns if goal was achieved
-    or not as boolean based on goal type (eg. Y + 'make' = True)
+    or not as boolean based on goal type (eg. 'y' + 'make' = True)
     """
-    if response.lower()=='y' and goal.goal_type=='make' or response.lower()=='n' and goal.goal_type=='break':
-        return True
-    elif response.lower()=='y' and goal.goal_type=='break' or response.lower()=='n' and goal.goal_type=='make':
-        return False
+
+    if goal.goal_type=='make':
+        if response.lower()=='y' or response.lower()=='yes':
+            return True
+        if response.lower()=='n' or response.lower()=='no':
+            return False
+    if goal.goal_type=='break':
+        if response.lower()=='n' or response.lower()=='no':
+            return True
+        if response.lower()=='y' or response.lower()=='yes':
+            return False
+
 
 
 def get_streak(histories):
