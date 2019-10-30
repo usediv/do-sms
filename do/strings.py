@@ -36,7 +36,7 @@ def activation_error_text():
     return "Reply START to begin receiving daily texts"
 
 def daily_checkin_text(goal, weekday):
-    return f"Happy {weekday}! Did you {goal} yesterday? Reply Y for yes or N for no"
+    return f"Happy {weekday}! Did you {goal.lower()} yesterday? Reply Y for yes or N for no"
 
 def achievement_confirmation_text(count,streak,start_date,today=today):
     delta = today-start_date
