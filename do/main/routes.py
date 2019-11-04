@@ -83,8 +83,8 @@ def sms():
                     # but is not active (pending)
                     if goal.active==False:
 
-                        #check for confirmation and activate if received
-                        if text.lower()=='start':
+                        #check for confirmation or start or similar text
+                        if text.lower()=='start' or text.lower()=='yes' or text.lower()=='unstop':
                             goal.start_date=today
                             goal.active=True
                             db.session.commit()
@@ -97,13 +97,21 @@ def sms():
                     # if active goal
                     elif goal.active==True:
 
-                        #load current history to check if in DB
-                        current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
+                        # check if stop or similar received
+                        if text.lower()=='stop' or text.lower()=='stopall' or text.lower()=='unsubscribe' or text.lower()=='cancel' or text.lower()=='end' or text.lower()=='quit':
+
+                            # set goal to inactive so that user won't receive daily_checkins
+                            goal.active = False
+                            db.session.commit()
 
                         # if goal response received
-                        if text.lower()=='y' or text.lower()=='yes' or text.lower()=='n' or text.lower()=='no':
+                        elif text.lower()=='y' or text.lower()=='yes' or text.lower()=='n' or text.lower()=='no':
 
+                            # parse response
                             response = get_achieved(goal,text)
+
+                            #load current history to check if in DB
+                            current_history = History.query.filter_by(date=today, goal_id=goal.id).first()
 
                             # check if existing history item, update DB and respond
                             if current_history==None:
