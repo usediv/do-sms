@@ -21,17 +21,22 @@ def sms_alert(message,recipient):
 
 def sms_broadcast(message,users=User.query.all()):
     '''
-    for alerts: sends a one-off sms to multiple users from do, expects message
-    to be a string and users to be a list of user IDs (default: all users)
+    for alerts: sends a one-off sms to multiple users from Do if they have an
+    active goal, expects message to be a string and users to be a list of user
+    IDs (default: all users)
     '''
     body = f'{message}'
     for user in users:
-        phone_number = user.phone_number
-        client.messages.create(
-                              body=body,
-                              from_=do_number,
-                              to=phone_number
-                          )
+        goal = Goal.query.filter_by(user_id=user.id).first()
+        # check if goal is active
+        if goal!=None and goal.active == True:
+            # send message
+            phone_number = user.phone_number
+            client.messages.create(
+                                  body=body,
+                                  from_=do_number,
+                                  to=phone_number
+                              )
 
 def daily_checkin():
     '''
