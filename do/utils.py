@@ -22,8 +22,8 @@ def sms_alert(message,recipient):
 def sms_broadcast(message,users=User.query.all()):
     '''
     for alerts: sends a one-off sms to multiple users from Do if they have an
-    active goal, expects message to be a string and users to be a list of user
-    IDs (default: all users)
+    active goal, expects message to be a string and users to be a list of users
+    (default: all users)
     '''
     body = f'{message}'
     for user in users:
