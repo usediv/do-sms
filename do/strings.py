@@ -7,6 +7,9 @@ def welcome_text():
 def down_text():
     return "Sorry, Do isn't available right now. Please try again later"
 
+def wrong_number_text():
+    return "Do has moved! Please text +1 844 986 1341 to continue using Do"
+
 def desc_prompt_text(goal_type):
     if goal_type.lower()=='make':
         amount='more'
